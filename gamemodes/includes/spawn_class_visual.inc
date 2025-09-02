@@ -46,6 +46,7 @@ public Sys_OnPlayerConnect(playerid)
     PlayerTextDrawSetShadow(playerid, g_ptdWelcomeBox[playerid], 0);
     PlayerTextDrawSetOutline(playerid, g_ptdWelcomeBox[playerid], 0);
     PlayerTextDrawTextSize(playerid, g_ptdWelcomeBox[playerid], 490.0, 0.0);
+    PlayerPlaySound(playerid, 140, -752.0, 485.0, 1373.0);
 
     g_ptdWelcomeLogo[playerid] = CreatePlayerTextDraw(playerid, 320.0, 145.0, "GAMERX");
     PlayerTextDrawFont(playerid, g_ptdWelcomeLogo[playerid], 2);
@@ -89,6 +90,9 @@ public Internal_SetPlayerSpawnScreen(playerid)
     SendClientMessage(playerid, 0xFFFF00AA, "Anim System by [VLA]Wooz1e Loaded: type /animhelp to view the list."); SendClientMessage(playerid, 0xFFDD00AA, "* Your client is outdated. Please update your SA-MP client to to 0.3.7-R5 as soon as possible!"); SendClientMessage(playerid, 0xFFDD00AA, "* You can download San Andreas Multiplayer client at {FFFFFF}www.sa-mp.com");
     new oldName[MAX_PLAYER_NAME], newName[MAX_PLAYER_NAME], string[128]; GetPlayerName(playerid, oldName, sizeof(oldName));
     new bool:db_connection_failed = true; if (db_connection_failed) { format(newName, sizeof(newName), "GXTempName%d", playerid); SetPlayerName(playerid, newName); format(string, sizeof(string), "** Your player name %s is not currently registered...", oldName); SendClientMessage(playerid, 0x33CC33FF, string); SendClientMessage(playerid, 0x33CC33FF, "*	you can type the /register command once you spawn to register it."); }
+   
+    
+    
     SetPlayerInterior(playerid, 17); SetPlayerPos(playerid, 487.7120, -2.5619, 1002.3828); SetPlayerFacingAngle(playerid, -180.0); SetPlayerCameraPos(playerid, 487.5785, -12.2041, 1000.6797); SetPlayerCameraLookAt(playerid, 487.7120, -2.5619, 1002.3828, CAMERA_CUT);
     ApplyAnimation(playerid, "STRIP", "strip_D", 4.1, 1, 0, 0, 0, 0); TogglePlayerControllable(playerid, 0); SetPlayerDrunkLevel(playerid, 2000);
     
@@ -131,5 +135,6 @@ public Sys_OnPlayerSpawn(playerid)
     // We can also destroy these now to clean up.
     PlayerTextDrawDestroy(playerid, g_ptdWelcomeCommands[playerid]);
     PlayerTextDrawDestroy(playerid, g_ptdWelcomeTips[playerid]);
+    SetPlayerInterior(playerid, 0);
     return 1;
 }

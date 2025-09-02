@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <?xml-stylesheet href="file:///C|/Users/ROG/Documents/Open-gamerx-legacy/qawno/xml/pawndoc.xsl" type="text/xsl"?>
-<doc source="C:\Users\ROG\Documents\Open-gamerx-legacy\gamemode\gamemode.pwn">
+<doc source="C:\Users\ROG\Documents\GitHub\Open-gamerx-legacy\gamemodes\gamemode.pwn">
 	<assembly>
 		<name>gamemode.pwn</name>
 	</assembly>
@@ -25721,6 +25721,30 @@
 			</param>
 			<library>omp_player</library>  <summary>Play an 'audio stream' for a player.  Normal audio files also work (e.g.  MP3).</summary>                <seealso name="StopAudioStreamForPlayer" />  <seealso name="PlayerPlaySound" />  <returns>  <b><c>1</c></b>: The function executed successfully.<br />  <b><c>0</c></b>: The function failed to execute.  The player specified does not exist.  </returns> 
 		</member>
+		<member name="M:PlayerPlaySound" syntax="PlayerPlaySound(playerid, soundid, x, y, z)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="Sys_OnPlayerConnect"/>
+			<param name="playerid">
+				The ID of the player for whom to play the sound
+			</param>
+			<param name="soundid">
+				The sound to play
+			</param>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+				x coordinate for the sound to play at. (<b><c>optional=0.0</c></b>)
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+				y coordinate for the sound to play at. (<b><c>optional=0.0</c></b>)
+			</param>
+			<param name="z">
+				<paraminfo>Float </paraminfo>
+				z coordinate for the sound to play at. (<b><c>optional=0.0</c></b>)
+			</param>
+			<library>omp_player</library>  <summary>Plays the specified sound for a player.</summary>            <seealso name="PlayCrimeReportForPlayer" />  <seealso name="PlayAudioStreamForPlayer" />  <seealso name="StopAudioStreamForPlayer" />  <remarks>Only use the coordinates if you want the sound to be played at a certain position. By  default, the sound will be played with no position at a certain position.</remarks>  <returns>  <b><c>1</c></b>: The function executed successfully.<br />  <b><c>0</c></b>: The function failed to execute.  This means the player is not connected.  </returns> 
+		</member>
 		<member name="M:PlayerTextDrawAlignment" syntax="PlayerTextDrawAlignment(playerid, textid, alignment)">
 			<tagname value="bool"/>
 			<attribute name="native"/>
@@ -28598,6 +28622,7 @@
 			<attribute name="native"/>
 			<referrer name="Utils_ChaosMod"/>
 			<referrer name="Internal_SetPlayerSpawnScreen"/>
+			<referrer name="Sys_OnPlayerSpawn"/>
 			<referrer name="Teleport_ToRandom"/>
 			<param name="playerid">
 				The ID of the player to set the interior of
@@ -29144,9 +29169,10 @@
 		</member>
 		<member name="M:Sys_OnPlayerConnect" syntax="Sys_OnPlayerConnect(playerid)">
 			<attribute name="public"/>
-			<stacksize value="6"/>
+			<stacksize value="7"/>
 			<referrer name="Iter_OnPlayerConnect"/>
 			<dependency name="CreatePlayerTextDraw"/>
+			<dependency name="PlayerPlaySound"/>
 			<dependency name="PlayerTextDrawAlignment"/>
 			<dependency name="PlayerTextDrawBoxColor"/>
 			<dependency name="PlayerTextDrawColor"/>
@@ -29192,6 +29218,7 @@
 			<dependency name="PlayerTextDrawHide"/>
 			<dependency name="SetCameraBehindPlayer"/>
 			<dependency name="SetPlayerDrunkLevel"/>
+			<dependency name="SetPlayerInterior"/>
 			<dependency name="TogglePlayerControllable"/>
 			<dependency name="g_ptdWelcomeCommands"/>
 			<dependency name="g_ptdWelcomeTips"/>
