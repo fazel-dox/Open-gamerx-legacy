@@ -49,14 +49,14 @@ new MySQL:g_dbConnection;
 // ---===[ 4. SYSTEM INCLUDES ]===---
 #include <accounts.inc>
 #include <commands.inc>
-#include <spawn_system.inc>
+#include <spawn_class_visual.inc>
 #include <admin.inc>
 #include <class_system.inc>
 #include <player_objects.inc>
 
 // Gamerx improved(the non legacy version)'s features, They will be moved to the non legacy branch after this project finishes/reaches to the public state. they're here for early testing.
-#include <Nonlegacyexperimental/Fly.inc>
-#include <Nonlegacyexperimental/Globalradio.inc>
+#include <Non_legacy_experimental_features/Fly.inc>
+#include <Non_legacy_experimental_features/Globalradio.inc>
 
 public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_ERRORS:success)
 {
