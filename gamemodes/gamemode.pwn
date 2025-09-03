@@ -1,6 +1,6 @@
 /*
     ================================================================================
-    Project:    Open GamerX - Base
+    Project:    GamerX Legacy - Base
     File:       gamemode.pwn 
     Description: The core file for the Open GamerX project
                  Initializes all systems and handles core callbacks.
@@ -12,8 +12,7 @@
 #include <a_mysql>
 #include <sscanf2>
 
-// *** FIX: We only need the y_commands hook for YCMD:y_unknown. ***
-// We will not try to call non-existent functions.
+
 #include <YSI_Visual/y_commands>
 
 #include <samp_bcrypt>
@@ -52,6 +51,7 @@ new MySQL:g_dbConnection;
 #include "includes/admin.inc"
 #include "includes/class_system.inc"
 #include "includes/player_objects.inc"
+#include "includes/races.inc" 
 
 // Gamerx improved(the non legacy version)'s features, They will be moved to the non legacy branch after this project finishes/reaches to the public state. they're here for early testing.
 #include "Non_legacy_experimental_features/Fly.inc"
@@ -117,12 +117,20 @@ public OnGameModeInit()
 
     Sys_InitSpawn();
     print("[SUCCESS] Spawn System Initialized.");
+    
+    OnGameModeInit_Races(); // *** ADDED FOR RACE SYSTEM ***
 
     Teleports_LoadAll();
     
     print("------------------------------------");
     print(" GamerX Rebirth is now running.");
     print("------------------------------------\n");
+    return 1;
+}
+
+public OnGameModeExit() // *** ADDED FOR RACE SYSTEM ***
+{
+    OnGameModeExit_Races();
     return 1;
 }
 
@@ -140,6 +148,7 @@ public OnPlayerConnect(playerid)
 
     // Show the welcome TextDraws
     Sys_OnPlayerConnect(playerid);
+    Races_OnPlayerConnect(playerid); // *** ADDED FOR RACE SYSTEM ***
     
     // The forced LoadAccount(playerid); call has been REMOVED.
     // Players can now join and play immediately.

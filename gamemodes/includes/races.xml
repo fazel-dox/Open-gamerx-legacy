@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="file:///C|/Users/ROG/Documents/GitHub/Open-gamerx-legacy/qawno/xml/pawndoc.xsl" type="text/xsl"?>
+<doc source="C:\Users\ROG\Documents\GitHub\Open-gamerx-legacy\gamemodes\includes\races.inc">
+	<assembly>
+		<name>races.inc</name>
+	</assembly>
+	<members>
+
+		<!-- enumerations -->
+		<member name="T:E_PLAYER_RACE_DATA" value="3">
+			<tagname value="E_PLAYER_RACE_DATA"/>
+			<member name="C:pInRace" value="0">
+			</member>
+			<member name="C:pCurrentCheckpoint" value="1">
+			</member>
+			<member name="C:pRaceStartTime" value="2">
+				<tagname value="Float"/>
+			</member>
+			<referrer name="Races_OnPlayerConnect"/>
+		</member>
+
+		<!-- constants -->
+		<member name="C:false" value="0">
+			<tagname value="bool"/>
+			<referrer name="leave"/>
+		</member>
+		<member name="C:true" value="1">
+			<tagname value="bool"/>
+			<referrer name="join"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+
+		<!-- variables -->
+		<member name="F:PlayerRaceData">
+			<referrer name="join"/>
+			<referrer name="leave"/>
+			<referrer name="Races_OnPlayerConnect"/>
+		</member>
+		<member name="F:__date">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__time">
+		</member>
+		<member name="F:g_JoinRaceTD">
+			<tagname value="Text"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<referrer name="OnGameModeExit_Races"/>
+		</member>
+		<member name="F:g_RaceState">
+			<referrer name="join"/>
+			<referrer name="raceparticipants"/>
+			<referrer name="raceinfo"/>
+		</member>
+
+		<!-- functions -->
+		<member name="M:DisablePlayerRaceCheckpoint" syntax="DisablePlayerRaceCheckpoint()">
+			<stacksize value="1"/>
+			<referrer name="leave"/>
+		</member>
+		<member name="M:GameTextForPlayer" syntax="GameTextForPlayer()">
+			<stacksize value="1"/>
+			<referrer name="join"/>
+		</member>
+		<member name="M:OnGameModeExit_Races" syntax="OnGameModeExit_Races()">
+			<attribute name="public"/>
+			<stacksize value="4"/>
+			<dependency name="TextDrawDestroy"/>
+			<dependency name="g_JoinRaceTD"/>
+		</member>
+		<member name="M:OnGameModeInit_Races" syntax="OnGameModeInit_Races()">
+			<attribute name="public"/>
+			<stacksize value="6"/>
+			<dependency name="TextDrawBackgroundColor"/>
+			<dependency name="TextDrawBoxColor"/>
+			<dependency name="TextDrawColor"/>
+			<dependency name="TextDrawCreate"/>
+			<dependency name="TextDrawFont"/>
+			<dependency name="TextDrawLetterSize"/>
+			<dependency name="TextDrawSetOutline"/>
+			<dependency name="TextDrawTextSize"/>
+			<dependency name="TextDrawUseBox"/>
+			<dependency name="g_JoinRaceTD"/>
+			<dependency name="print"/>
+			<dependency name="true"/>
+		</member>
+		<member name="M:PlayerPlaySound" syntax="PlayerPlaySound(playerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:Races_OnPlayerConnect" syntax="Races_OnPlayerConnect(playerid)">
+			<stacksize value="2"/>
+			<dependency name="E_PLAYER_RACE_DATA"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="pRaceStartTime"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:SendClientMessage" syntax="SendClientMessage()">
+			<stacksize value="1"/>
+			<referrer name="join"/>
+			<referrer name="leave"/>
+			<referrer name="raceparticipants"/>
+			<referrer name="raceinfo"/>
+			<referrer name="aracehelp"/>
+			<referrer name="buildhelp"/>
+		</member>
+		<member name="M:ShowPlayerDialog" syntax="ShowPlayerDialog()">
+			<stacksize value="1"/>
+			<referrer name="racehelp"/>
+			<referrer name="aracehelp"/>
+			<referrer name="buildhelp"/>
+		</member>
+		<member name="M:TextDrawBackgroundColor" syntax="TextDrawBackgroundColor()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:TextDrawBoxColor" syntax="TextDrawBoxColor()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:TextDrawColor" syntax="TextDrawColor()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:TextDrawCreate" syntax="TextDrawCreate()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:TextDrawDestroy" syntax="TextDrawDestroy()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeExit_Races"/>
+		</member>
+		<member name="M:TextDrawFont" syntax="TextDrawFont()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:TextDrawLetterSize" syntax="TextDrawLetterSize()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:TextDrawSetOutline" syntax="TextDrawSetOutline()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:TextDrawTextSize" syntax="TextDrawTextSize()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:TextDrawUseBox" syntax="TextDrawUseBox()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:YCMD_aracehelp" syntax="YCMD_aracehelp()">
+			<stacksize value="1"/>
+			<referrer name="raceadminhelp"/>
+		</member>
+		<member name="M:YCMD_buildhelp" syntax="YCMD_buildhelp()">
+			<stacksize value="1"/>
+			<referrer name="buildracehelp"/>
+		</member>
+		<member name="M:YCMD_raceinfo" syntax="YCMD_raceinfo()">
+			<stacksize value="1"/>
+			<referrer name="ri"/>
+		</member>
+		<member name="M:YCMD_raceparticipants" syntax="YCMD_raceparticipants()">
+			<stacksize value="1"/>
+			<referrer name="racers"/>
+			<referrer name="rp"/>
+			<referrer name="rps"/>
+		</member>
+		<member name="M:aracehelp" syntax="aracehelp(playerid, params[], help)">
+			<tagname value="YCMD"/>
+			<stacksize value="155"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="ShowPlayerDialog"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:buildhelp" syntax="buildhelp(playerid, params[], help)">
+			<tagname value="YCMD"/>
+			<stacksize value="242"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="ShowPlayerDialog"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:buildracehelp" syntax="buildracehelp(playerid, params[], help)">
+			<tagname value="COMMAND"/>
+			<stacksize value="6"/>
+			<dependency name="YCMD_buildhelp"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:join" syntax="join(playerid, params[], help)">
+			<tagname value="YCMD"/>
+			<stacksize value="7"/>
+			<dependency name="GameTextForPlayer"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="RACE_STATE_WAITING"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="g_RaceState"/>
+			<dependency name="pInRace"/>
+			<dependency name="true"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:leave" syntax="leave(playerid, params[], help)">
+			<tagname value="YCMD"/>
+			<stacksize value="6"/>
+			<dependency name="DisablePlayerRaceCheckpoint"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="false"/>
+			<dependency name="pInRace"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:print" syntax="print()">
+			<stacksize value="1"/>
+			<referrer name="OnGameModeInit_Races"/>
+		</member>
+		<member name="M:raceadminhelp" syntax="raceadminhelp(playerid, params[], help)">
+			<tagname value="COMMAND"/>
+			<stacksize value="6"/>
+			<dependency name="YCMD_aracehelp"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:racehelp" syntax="racehelp(playerid, params[], help)">
+			<tagname value="YCMD"/>
+			<stacksize value="319"/>
+			<dependency name="ShowPlayerDialog"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:raceinfo" syntax="raceinfo(playerid, params[], help)">
+			<tagname value="YCMD"/>
+			<stacksize value="6"/>
+			<dependency name="RACE_STATE_NONE"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="g_RaceState"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:raceparticipants" syntax="raceparticipants(playerid, params[], help)">
+			<tagname value="YCMD"/>
+			<stacksize value="6"/>
+			<dependency name="RACE_STATE_NONE"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="g_RaceState"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:racers" syntax="racers(playerid, params[], help)">
+			<tagname value="COMMAND"/>
+			<stacksize value="6"/>
+			<dependency name="YCMD_raceparticipants"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:ri" syntax="ri(playerid, params[], help)">
+			<tagname value="COMMAND"/>
+			<stacksize value="6"/>
+			<dependency name="YCMD_raceinfo"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:rp" syntax="rp(playerid, params[], help)">
+			<tagname value="COMMAND"/>
+			<stacksize value="6"/>
+			<dependency name="YCMD_raceparticipants"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:rps" syntax="rps(playerid, params[], help)">
+			<tagname value="COMMAND"/>
+			<stacksize value="6"/>
+			<dependency name="YCMD_raceparticipants"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+
+	</members>
+</doc>

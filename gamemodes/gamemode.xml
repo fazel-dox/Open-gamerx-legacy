@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<?xml-stylesheet href="file:///C|/Users/ROG/Documents/Open-gamerx-legacy/qawno/xml/pawndoc.xsl" type="text/xsl"?>
+<?xml-stylesheet href="file:///C|/Users/ROG/Documents/GitHub/Open-gamerx-legacy/qawno/xml/pawndoc.xsl" type="text/xsl"?>
 <doc source="C:\Users\ROG\Documents\GitHub\Open-gamerx-legacy\gamemodes\gamemode.pwn">
 	<assembly>
 		<name>gamemode.pwn</name>
@@ -619,6 +619,17 @@
 			<member name="C:pDeaths" value="135">
 			</member>
 			<referrer name="Iter_OnPlayerConnect"/>
+		</member>
+		<member name="T:E_PLAYER_RACE_DATA" value="3">
+			<tagname value="E_PLAYER_RACE_DATA"/>
+			<member name="C:pInRace" value="0">
+			</member>
+			<member name="C:pCurrentCheckpoint" value="1">
+			</member>
+			<member name="C:pRaceStartTime" value="2">
+				<tagname value="Float"/>
+			</member>
+			<referrer name="Races_OnPlayerConnect"/>
 		</member>
 		<member name="T:E_POB_DATA" value="3">
 			<tagname value="E_POB_DATA"/>
@@ -2847,7 +2858,7 @@
 			<referrer name="CodeScanCall"/>
 			<library>y_emit</library>  <remarks>  The JIT plugin address translation register value for use in <c>LCTRL</c>  and <c>SCTRL</c>.  </remarks> 
 		</member>
-		<member name="C:__line" value="245">
+		<member name="C:__line" value="254">
 			<referrer name="@_yCkick"/>
 			<referrer name="@_yCban"/>
 			<referrer name="Teleports_LoadAll"/>
@@ -3598,6 +3609,7 @@
 			<referrer name="Ban_PerformBan"/>
 			<referrer name="@_yCspoma"/>
 			<referrer name="PObjects_OnDisconnect"/>
+			<referrer name="@_yCleave"/>
 			<referrer name="StopFlying"/>
 			<referrer name="_@yHOnPlayerDisconnect@000"/>
 			<referrer name="_@yHOnPlayerDeath@000"/>
@@ -3724,6 +3736,9 @@
 			<referrer name="Internal_SetPlayerSpawnScreen"/>
 			<referrer name="Teleport_ToRandom"/>
 			<referrer name="@_yCcpo"/>
+			<referrer name="@_yCjoin"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<referrer name="@yH_OnPlayerEnterRaceCheckpoint@000"/>
 			<referrer name="StartFlying"/>
 			<referrer name="@yH_OnPlayerDisconnect@000"/>
 			<referrer name="@yH_OnPlayerDeath@000"/>
@@ -3774,6 +3789,13 @@
 			<referrer name="@yC_cpo"/>
 			<referrer name="@yC_epo"/>
 			<referrer name="@yC_spoma"/>
+			<referrer name="@yC_join"/>
+			<referrer name="@yC_leave"/>
+			<referrer name="@yC_raceparticipants"/>
+			<referrer name="@yC_raceinfo"/>
+			<referrer name="@yC_racehelp"/>
+			<referrer name="@yC_aracehelp"/>
+			<referrer name="@yC_buildhelp"/>
 			<referrer name="@yC_fly"/>
 			<referrer name="@yC_setradio"/>
 			<referrer name="@yC_stopradio"/>
@@ -4359,6 +4381,7 @@
 			<referrer name="@yH_OnYSIInit@000"/>
 			<referrer name="@yH_OnScriptExit@000"/>
 			<referrer name="@yH_OnMasterSystemClose@000"/>
+			<referrer name="@yH_OnPlayerEnterRaceCheckpoint@000"/>
 			<referrer name="@yH_OnPlayerDisconnect@000"/>
 			<referrer name="@yH_OnPlayerDeath@000"/>
 			<referrer name="@yH_OnPlayerStateChange@000"/>
@@ -4384,6 +4407,8 @@
 			<referrer name="Dialog_OnAccounts"/>
 			<referrer name="@_yCkick"/>
 			<referrer name="@_yCban"/>
+			<referrer name="@_yCaracehelp"/>
+			<referrer name="@_yCbuildhelp"/>
 			<referrer name="OnPlayerCommandReceived"/>
 			<referrer name="Iter_OnPlayerConnect"/>
 			<referrer name="OnPlayerRequestClass"/>
@@ -4396,6 +4421,12 @@
 			<referrer name="PObjects_OnDisconnect"/>
 			<referrer name="ApplyPlayerObjectMaterial"/>
 			<referrer name="_@yHOnPlayerEditObject@000"/>
+		</member>
+		<member name="F:PlayerRaceData">
+			<referrer name="@_yCjoin"/>
+			<referrer name="@_yCleave"/>
+			<referrer name="Races_OnPlayerConnect"/>
+			<referrer name="_@yHOnPlayerEnterRaceCheckpoint@000"/>
 		</member>
 		<member name="F:Q@">
 			<referrer name="SetTimerExAddr"/>
@@ -5307,6 +5338,8 @@
 		<member name="F:__file">
 		</member>
 		<member name="F:__file">
+		</member>
+		<member name="F:__file">
 			<referrer name="@_yCcpo"/>
 			<referrer name="@_yCepo"/>
 			<referrer name="@_yCspoma"/>
@@ -6073,6 +6106,16 @@
 		<member name="F:g_ClassMap">
 			<referrer name="Classes_Init"/>
 			<referrer name="OnPlayerRequestClass"/>
+		</member>
+		<member name="F:g_JoinRaceTD">
+			<tagname value="Text"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<referrer name="OnGameModeExit_Races"/>
+		</member>
+		<member name="F:g_RaceState">
+			<referrer name="@_yCjoin"/>
+			<referrer name="@_yCraceparticipants"/>
+			<referrer name="@_yCraceinfo"/>
 		</member>
 		<member name="F:g_TeleportKeyCount">
 			<referrer name="Teleports_LoadAll"/>
@@ -8593,6 +8636,22 @@
 			<param name="id">
 			</param>
 		</member>
+		<member name="M:@_yCaracehelp" syntax="@_yCaracehelp(playerid, params[], help)">
+			<attribute name="public"/>
+			<stacksize value="154"/>
+			<referrer name="@yC_aracehelp"/>
+			<dependency name="PlayerData"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="ShowPlayerDialog"/>
+			<dependency name="pAdminLevel"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
 		<member name="M:@_yCban" syntax="@_yCban(playerid, params[], __help)">
 			<attribute name="public"/>
 			<stacksize value="137"/>
@@ -8611,6 +8670,22 @@
 				<paraminfo> [] </paraminfo>
 			</param>
 			<param name="__help">
+			</param>
+		</member>
+		<member name="M:@_yCbuildhelp" syntax="@_yCbuildhelp(playerid, params[], help)">
+			<attribute name="public"/>
+			<stacksize value="241"/>
+			<referrer name="@yC_buildhelp"/>
+			<dependency name="PlayerData"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="ShowPlayerDialog"/>
+			<dependency name="pAdminLevel"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
 			</param>
 		</member>
 		<member name="M:@_yCcar" syntax="@_yCcar(playerid, params[])">
@@ -8723,6 +8798,26 @@
 			<param name="help">
 			</param>
 		</member>
+		<member name="M:@_yCjoin" syntax="@_yCjoin(playerid, params[], help)">
+			<attribute name="public"/>
+			<stacksize value="6"/>
+			<referrer name="@yC_join"/>
+			<dependency name="GameTextForPlayer"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="RACE_STATE_WAITING"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="g_RaceState"/>
+			<dependency name="pInRace"/>
+			<dependency name="true"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
 		<member name="M:@_yCkick" syntax="@_yCkick(playerid, params[], __help)">
 			<attribute name="public"/>
 			<stacksize value="442"/>
@@ -8748,6 +8843,24 @@
 			<param name="__help">
 			</param>
 		</member>
+		<member name="M:@_yCleave" syntax="@_yCleave(playerid, params[], help)">
+			<attribute name="public"/>
+			<stacksize value="5"/>
+			<referrer name="@yC_leave"/>
+			<dependency name="DisablePlayerRaceCheckpoint"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="false"/>
+			<dependency name="pInRace"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
 		<member name="M:@_yCmegadrunk" syntax="@_yCmegadrunk(playerid, params[])">
 			<attribute name="public"/>
 			<stacksize value="5"/>
@@ -8758,6 +8871,49 @@
 			</param>
 			<param name="params">
 				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:@_yCracehelp" syntax="@_yCracehelp(playerid, params[], help)">
+			<attribute name="public"/>
+			<stacksize value="318"/>
+			<referrer name="@yC_racehelp"/>
+			<dependency name="ShowPlayerDialog"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:@_yCraceinfo" syntax="@_yCraceinfo(playerid, params[], help)">
+			<attribute name="public"/>
+			<stacksize value="5"/>
+			<referrer name="@yC_raceinfo"/>
+			<dependency name="RACE_STATE_NONE"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="g_RaceState"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
+		<member name="M:@_yCraceparticipants" syntax="@_yCraceparticipants(playerid, params[], help)">
+			<attribute name="public"/>
+			<stacksize value="5"/>
+			<referrer name="@yC_raceparticipants"/>
+			<dependency name="RACE_STATE_NONE"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="g_RaceState"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
 			</param>
 		</member>
 		<member name="M:@_yCrules" syntax="@_yCrules(playerid, params[])">
@@ -8946,12 +9102,46 @@
 			<stacksize value="1"/>
 			<library>time</library>  <summary>A timer event occurred.</summary>  <remarks>  This function executes after the configured delay or interval expires.  See <c>settimer</c> to  set the delay or interval.  Depending on the timing precision of the host, the call may occur  later than the delay that was set.  <p/>  If the timer was set as a "single-shot", it must be ex plicitly set again for a next execution  for the <c>@timer</c>function.  If the timer is set to be repetitive, <c>@timer</c> will continue  to be called with the set interval until it is disabled with another call to <c>settimer</c>.  </remarks>  <returns>The return value of this function is currently ignored.</returns> 
 		</member>
+		<member name="M:@yC_aracehelp" syntax="@yC_aracehelp(a, b[], c, i)">
+			<tagname value="_YCMD_4"/>
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="@_"/>
+			<dependency name="@_yCaracehelp"/>
+			<dependency name="U@"/>
+			<param name="a">
+			</param>
+			<param name="b">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="c">
+			</param>
+			<param name="i">
+			</param>
+		</member>
 		<member name="M:@yC_ban" syntax="@yC_ban(a, b[], c, i)">
 			<tagname value="_YCMD_4"/>
 			<attribute name="public"/>
 			<stacksize value="8"/>
 			<dependency name="@_"/>
 			<dependency name="@_yCban"/>
+			<dependency name="U@"/>
+			<param name="a">
+			</param>
+			<param name="b">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="c">
+			</param>
+			<param name="i">
+			</param>
+		</member>
+		<member name="M:@yC_buildhelp" syntax="@yC_buildhelp(a, b[], c, i)">
+			<tagname value="_YCMD_4"/>
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="@_"/>
+			<dependency name="@_yCbuildhelp"/>
 			<dependency name="U@"/>
 			<param name="a">
 			</param>
@@ -9048,6 +9238,23 @@
 			<param name="i">
 			</param>
 		</member>
+		<member name="M:@yC_join" syntax="@yC_join(a, b[], c, i)">
+			<tagname value="_YCMD_4"/>
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="@_"/>
+			<dependency name="@_yCjoin"/>
+			<dependency name="U@"/>
+			<param name="a">
+			</param>
+			<param name="b">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="c">
+			</param>
+			<param name="i">
+			</param>
+		</member>
 		<member name="M:@yC_kick" syntax="@yC_kick(a, b[], c, i)">
 			<tagname value="_YCMD_4"/>
 			<attribute name="public"/>
@@ -9065,12 +9272,80 @@
 			<param name="i">
 			</param>
 		</member>
+		<member name="M:@yC_leave" syntax="@yC_leave(a, b[], c, i)">
+			<tagname value="_YCMD_4"/>
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="@_"/>
+			<dependency name="@_yCleave"/>
+			<dependency name="U@"/>
+			<param name="a">
+			</param>
+			<param name="b">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="c">
+			</param>
+			<param name="i">
+			</param>
+		</member>
 		<member name="M:@yC_megadrunk" syntax="@yC_megadrunk(a, b[], c, i)">
 			<tagname value="_YCMD_4"/>
 			<attribute name="public"/>
 			<stacksize value="8"/>
 			<dependency name="@_"/>
 			<dependency name="@_yCmegadrunk"/>
+			<dependency name="U@"/>
+			<param name="a">
+			</param>
+			<param name="b">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="c">
+			</param>
+			<param name="i">
+			</param>
+		</member>
+		<member name="M:@yC_racehelp" syntax="@yC_racehelp(a, b[], c, i)">
+			<tagname value="_YCMD_4"/>
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="@_"/>
+			<dependency name="@_yCracehelp"/>
+			<dependency name="U@"/>
+			<param name="a">
+			</param>
+			<param name="b">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="c">
+			</param>
+			<param name="i">
+			</param>
+		</member>
+		<member name="M:@yC_raceinfo" syntax="@yC_raceinfo(a, b[], c, i)">
+			<tagname value="_YCMD_4"/>
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="@_"/>
+			<dependency name="@_yCraceinfo"/>
+			<dependency name="U@"/>
+			<param name="a">
+			</param>
+			<param name="b">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="c">
+			</param>
+			<param name="i">
+			</param>
+		</member>
+		<member name="M:@yC_raceparticipants" syntax="@yC_raceparticipants(a, b[], c, i)">
+			<tagname value="_YCMD_4"/>
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="@_"/>
+			<dependency name="@_yCraceparticipants"/>
 			<dependency name="U@"/>
 			<param name="a">
 			</param>
@@ -9265,6 +9540,18 @@
 			</param>
 			<param name="fRotZ">
 				<paraminfo>Float &amp; </paraminfo>
+			</param>
+		</member>
+		<member name="M:@yH_OnPlayerEnterRaceCheckpoint@000" syntax="@yH_OnPlayerEnterRaceCheckpoint@000(&amp;playerid)">
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="O@A_"/>
+			<dependency name="O@V_"/>
+			<dependency name="_@Hy"/>
+			<dependency name="_@yHOnPlayerEnterRaceCheckpoint@000"/>
+			<dependency name="true"/>
+			<param name="playerid">
+				<paraminfo> &amp; </paraminfo>
 			</param>
 		</member>
 		<member name="M:@yH_OnPlayerStateChange@000" syntax="@yH_OnPlayerStateChange@000(&amp;playerid, &amp;newstate, &amp;oldstate)">
@@ -17213,6 +17500,15 @@
 			<referrer name="Indirection_OnGameModeInit"/>
 			<library>omp_core</library>  <summary>Disable all the interior entrances and exits in the game (the yellow arrows at doors).</summary>  <seealso name="AllowInteriorWeapons" />  <remarks>If the gamemode is changed after this function has been used, and the new gamemode doesn't  disable markers, the markers will NOT reappear for already-connected players (but will for newly  connected players).</remarks>  <remarks>This function will only work if it has been used BEFORE a player connects (it is recommended  to use it in OnGameModeInit).  It will not remove a connected player's markers.</remarks>  <returns>This function always returns <b><c>1</c></b>.</returns> 
 		</member>
+		<member name="M:DisablePlayerRaceCheckpoint" syntax="DisablePlayerRaceCheckpoint(playerid)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="@_yCleave"/>
+			<param name="playerid">
+				The player to disable the current checkpoint for
+			</param>
+			<library>omp_checkpoint</library>  <summary>Disable any initialized race checkpoints for a specific player, since you can only have  one at any given time.</summary>    <seealso name="SetPlayerCheckpoint" />  <seealso name="DisablePlayerCheckpoint" />  <seealso name="IsPlayerInCheckpoint" />  <seealso name="SetPlayerRaceCheckpoint" />  <seealso name="IsPlayerInRaceCheckpoint" />  <seealso name="OnPlayerEnterCheckpoint" />  <seealso name="OnPlayerLeaveCheckpoint" />  <seealso name="OnPlayerEnterRaceCheckpoint" />  <seealso name="OnPlayerLeaveRaceCheckpoint" /> 
+		</member>
 		<member name="M:DisasmDecodeInsn" syntax="DisasmDecodeInsn(ctx[])">
 			<tagname value="bool"/>
 			<stacksize value="6"/>
@@ -18182,6 +18478,7 @@
 			<referrer name="@_yCcpo"/>
 			<referrer name="@_yCepo"/>
 			<referrer name="ApplyPlayerObjectMaterial"/>
+			<referrer name="@_yCjoin"/>
 			<referrer name="OnPlayerCommandReceived"/>
 			<param name="playerid">
 				The ID of the player to show the gametext for
@@ -21180,6 +21477,7 @@
 			<dependency name="Classes_Init"/>
 			<dependency name="DisableInteriorEnterExits"/>
 			<dependency name="EnableStuntBonusForAll"/>
+			<dependency name="OnGameModeInit_Races"/>
 			<dependency name="SendRconCommand"/>
 			<dependency name="SetGameModeText"/>
 			<dependency name="Sys_InitSpawn"/>
@@ -22763,6 +23061,7 @@
 			<dependency name="E_PLAYER_DATA"/>
 			<dependency name="PlayerData"/>
 			<dependency name="PlayerData"/>
+			<dependency name="Races_OnPlayerConnect"/>
 			<dependency name="Sys_OnPlayerConnect"/>
 			<dependency name="g_playerVehicle"/>
 			<dependency name="pPassword"/>
@@ -24179,6 +24478,7 @@
 			<referrer name="@yH_OnYSIInit@000"/>
 			<referrer name="@yH_OnScriptExit@000"/>
 			<referrer name="@yH_OnMasterSystemClose@000"/>
+			<referrer name="@yH_OnPlayerEnterRaceCheckpoint@000"/>
 			<referrer name="@yH_OnPlayerDisconnect@000"/>
 			<referrer name="@yH_OnPlayerDeath@000"/>
 			<referrer name="@yH_OnPlayerStateChange@000"/>
@@ -24389,6 +24689,13 @@
 			<dependency name="YSI_GAMEMODE"/>
 			<summary>This callback is called when a gamemode ends, either through 'gmx', the server being shut  down, or <a href="#GameModeExit">GameModeExit</a>.</summary>  <seealso name="OnGameModeInit" />  <seealso name="OnFilterScriptExit" />  <seealso name="OnFilterScriptInit" />  <seealso name="GameModeExit" />  <remarks>This function can also be used in a filterscript to detect if the gamemode changes with  RCON commands like changemode or gmx, as changing the gamemode does not reload a filterscript.</remarks>  <remarks>When using OnGameModeExit in conjunction with the 'rcon gmx' console command keep in mind  there is a potential for client bugs to occur an example of this is excessive  <a href="#RemoveBuildingForPlayer">RemoveBuildingForPlayer</a>  calls during OnGameModeInit which could result in a client crash. </remarks>  <remarks>This callback will NOT be called if the server crashes or the process is killed by other  means, such as using the Linux kill command or pressing the close-button on the Windows console.  </remarks>  <returns>  <b><c>0</c></b> - Will prevent other filterscripts from receiving this callback.<br />  <b><c>1</c></b> - Indicates that this callback will be passed to the next filterscript.<br />  It is always called first in gamemode.  </returns> <p/> <library>y_scriptinit</library>  <transition keep="true" target="_script_init_fix_state : true"/>  <transition keep="true" target="_ALS : _ALS_go"/>  <remarks>  Call <c>OnScriptExit</c> in gamemodes.  </remarks> 
 		</member>
+		<member name="M:OnGameModeExit_Races" syntax="OnGameModeExit_Races()">
+			<attribute name="public"/>
+			<stacksize value="3"/>
+			<referrer name="ScriptInit_OnGameModeExit"/>
+			<dependency name="TextDrawDestroy"/>
+			<dependency name="g_JoinRaceTD"/>
+		</member>
 		<member name="M:OnGameModeInit" syntax="OnGameModeInit()">
 			<attribute name="public"/>
 			<stacksize value="3"/>
@@ -24396,6 +24703,23 @@
 			<dependency name="SSCANF_RunInit"/>
 			<dependency name="SSCANF_gInit"/>
 			<summary>This callback is triggered when the gamemode starts.</summary>  <seealso name="OnGameModeExit" />  <seealso name="OnFilterScriptInit" />  <seealso name="OnFilterScriptExit" />  <remarks>This function can also be used in a filterscript to detect if the gamemode changes with  RCON commands like changemode or gmx, as changing the gamemode does not reload a filterscript.</remarks>  <returns>  <b><c>0</c></b> - Will prevent other filterscripts from receiving this callback.<br />  <b><c>1</c></b> - Indicates that this callback will be passed to the next filterscript.<br />  It is always called first in gamemode.  </returns> <p/> <library>sscanf</library>  <remarks>  Called when the script starts if it is a gamemode.  This callback is also  called in filterscripts so we don't want to reinitialise the system in that  case.  </remarks> 
+		</member>
+		<member name="M:OnGameModeInit_Races" syntax="OnGameModeInit_Races()">
+			<attribute name="public"/>
+			<stacksize value="5"/>
+			<referrer name="Indirection_OnGameModeInit"/>
+			<dependency name="TextDrawBackgroundColor"/>
+			<dependency name="TextDrawBoxColor"/>
+			<dependency name="TextDrawColor"/>
+			<dependency name="TextDrawCreate"/>
+			<dependency name="TextDrawFont"/>
+			<dependency name="TextDrawLetterSize"/>
+			<dependency name="TextDrawSetOutline"/>
+			<dependency name="TextDrawTextSize"/>
+			<dependency name="TextDrawUseBox"/>
+			<dependency name="__print"/>
+			<dependency name="g_JoinRaceTD"/>
+			<dependency name="true"/>
 		</member>
 		<member name="M:OnIncomingConnection" syntax="OnIncomingConnection(playerid, ip_address[], port)">
 			<stacksize value="1"/>
@@ -25725,6 +26049,7 @@
 			<tagname value="bool"/>
 			<attribute name="native"/>
 			<referrer name="Sys_OnPlayerConnect"/>
+			<referrer name="_@yHOnPlayerEnterRaceCheckpoint@000"/>
 			<param name="playerid">
 				The ID of the player for whom to play the sound
 			</param>
@@ -26291,6 +26616,16 @@
 				<paraminfo> {_,Bit,Text,Group,File,Float,Text3D} </paraminfo>
 			</param>
 			<library>y_shortfunc</library>  <remarks>  An alias for <c>CallLocalFunction</c>, but with a shorter name (for macro  length limits) and better tag support.  </remarks> 
+		</member>
+		<member name="M:Races_OnPlayerConnect" syntax="Races_OnPlayerConnect(playerid)">
+			<stacksize value="2"/>
+			<referrer name="Iter_OnPlayerConnect"/>
+			<dependency name="E_PLAYER_RACE_DATA"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="pRaceStartTime"/>
+			<param name="playerid">
+			</param>
 		</member>
 		<member name="M:Random" syntax="Random(minOrMax, max, ...)">
 			<stacksize value="1"/>
@@ -27547,9 +27882,10 @@
 		</member>
 		<member name="M:ScriptInit_OnGameModeExit" syntax="ScriptInit_OnGameModeExit()">
 			<attribute name="public"/>
-			<stacksize value="1"/>
+			<stacksize value="3"/>
 			<automaton name="_ALS"/>
 			<referrer name="OnGameModeExit"/>
+			<dependency name="OnGameModeExit_Races"/>
 		</member>
 		<member name="M:ScriptInit_OnJITCompile" syntax="ScriptInit_OnJITCompile()">
 			<attribute name="public"/>
@@ -27865,6 +28201,12 @@
 			<referrer name="@_yCepo"/>
 			<referrer name="@_yCspoma"/>
 			<referrer name="ApplyPlayerObjectMaterial"/>
+			<referrer name="@_yCjoin"/>
+			<referrer name="@_yCleave"/>
+			<referrer name="@_yCraceparticipants"/>
+			<referrer name="@_yCraceinfo"/>
+			<referrer name="@_yCaracehelp"/>
+			<referrer name="@_yCbuildhelp"/>
 			<referrer name="StartFlying"/>
 			<referrer name="StopFlying"/>
 			<referrer name="_@yHOnPlayerConnect@000"/>
@@ -28949,6 +29291,9 @@
 			<referrer name="Dialog_OnAccounts"/>
 			<referrer name="@_yCrules"/>
 			<referrer name="Ban_PerformBan"/>
+			<referrer name="@_yCracehelp"/>
+			<referrer name="@_yCaracehelp"/>
+			<referrer name="@_yCbuildhelp"/>
 			<referrer name="OnDialogResponse"/>
 			<param name="playerid">
 				The ID of the player to show the dialog to
@@ -29419,6 +29764,150 @@
 			<dependency name="tpY"/>
 			<dependency name="tpZ"/>
 		</member>
+		<member name="M:TextDrawBackgroundColor" syntax="TextDrawBackgroundColor(textid, backgroundColor)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The ID of the textdraw to set the background colour of
+			</param>
+			<param name="backgroundColor">
+			</param>
+			<library>omp_textdraw</library>  <summary>Adjusts the text draw area background colour (the outline/shadow - NOT the box.  For box  colour, see <a href="#TextDrawBoxColor">TextDrawBoxColor</a>).</summary>    <param name="backgroundColour">The colour that the textdraw should be set to</param>  <remarks>If <a href="#TextDrawSetOutline">TextDrawSetOutline</a> is used with size &gt; <b><c>0</c></b>,  the outline colour will match the colour used in <a href="#TextDrawBackgroundColor">TextDrawBackgroundColor</a>.  Changing the value of colour seems to alter the colour used in <a href="#TextDrawColor">TextDrawColor</a></remarks>  <remarks>If you want to change the background colour of a textdraw that is already shown, you don't  have to recreate it.  Simply use <a href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>/  <a href="#TextDrawShowForAll">TextDrawShowForAll</a>  after modifying the textdraw and the change will be visible.</remarks> 
+		</member>
+		<member name="M:TextDrawBoxColor" syntax="TextDrawBoxColor(textid, boxColor)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The TextDraw to change
+			</param>
+			<param name="boxColor">
+			</param>
+			<library>omp_textdraw</library>  <summary>Adjusts the text box colour (only used if <a href="#TextDrawUseBox">TextDrawUseBox</a> 'use'  parameter is <b><c>1</c></b>).</summary>    <param name="boxColour">The colour (<b>RGBA</b>)</param>  <remarks>If you want to change the boxcolour of a textdraw that is already shown, you don't have  to recreate it.  Simply use <a href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>/  <a href="#TextDrawShowForAll">TextDrawShowForAll</a>  after modifying the textdraw and the change will be visible.</remarks> 
+		</member>
+		<member name="M:TextDrawColor" syntax="TextDrawColor(textid, textColor)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The ID of the textdraw to change the colour of.
+			</param>
+			<param name="textColor">
+			</param>
+			<library>omp_textdraw</library>  <summary>Sets the text colour of a textdraw.</summary>    <param name="textColour">The colour to set the textdraw to</param>  <remarks>You can also use GameText colours in TextDraws.</remarks>  <remarks>If the TextDraw is already shown, it must be re-shown (<a href="#TextDrawShowForAll">TextDrawShowForAll</a>/<a  href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>) for the changes of this function to take  effect.</remarks> 
+		</member>
+		<member name="M:TextDrawCreate" syntax="TextDrawCreate(x, y, format[], ...)">
+			<tagname value="Text"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+				The x (left/right) coordinate to create the textdraw at
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+				The y (up/down) coordinate to create the textdraw at
+			</param>
+			<param name="format">
+				<paraminfo> [] </paraminfo>
+				The text that will appear in the textdraw.  May be optionally formatted.
+			</param>
+			<param name="...">
+				<paraminfo> {LANDING_GEAR_STATE,Bit,Bitmap,XML,XMLEntry,Group,INI,Language,Style,DB,DBResult,Menu,Text,PlayerText,Text3D,PlayerText3D,File,Float,CUSTOM_TAG_TYPES,_} </paraminfo>
+			</param>
+			<library>omp_textdraw</library>  <summary>Creates a textdraw.  Textdraws are, as the name implies, text (mainly - there can be boxes,  sprites and model previews (skins/vehicles/weapons/objects too) that is drawn on a player's screens.</summary>        <remarks>  If you choose values for y that are less than 1, the first text row will be invisible and only  the shadow is visible.<br />  If part of the text is off-screen, the colour of the text will not show, only the shadow (if enabled)  will.  </remarks>  <remarks>  Maximum length of textdraw is <b>800</b> characters.  Longer text will crash the legacy (SA:MP) client  in older  versions.<br />  If you use colour codes (such as <b><c>~R~ ~G~</c></b>) beyond 255th character the legacy (SA:MP) client  will  crash trying to display the textdraw.  </remarks>  <remarks>  The x, y coordinate is the top left coordinate for the text draw area based on a 640x480 "canvas"  (irrespective of screen resolution).  If you plan on using <a href="#TextDrawAlignment">TextDrawAlignment</a>  with alignment <b><c>3</c></b> (right), the x, y coordinate is the top right coordinate for the text  draw.<br />  This function merely CREATES the textdraw, you must use <a href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>  or <a href="#TextDrawShowForAll">TextDrawShowForAll</a> to show it.<br />  It is recommended to use WHOLE numbers instead of decimal positions when creating textdraws to  ensure resolution friendly design.  </remarks>  <remarks>Keyboard key mapping codes (such as <b><c>~k~~VEHICLE_ENTER_EXIT~</c></b> don't work beyond  255th character. </remarks>  <returns>The ID of the created textdraw.  Textdraw IDs start at <b><c>0</c></b>.</returns> 
+		</member>
+		<member name="M:TextDrawDestroy" syntax="TextDrawDestroy(textid)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeExit_Races"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The ID of the textdraw to destroy.  Returned by <a href="#TextDrawCreate">TextDrawCreate</a>
+			</param>
+			<library>omp_textdraw</library>  <summary>Destroys a previously-created textdraw.</summary>   
+		</member>
+		<member name="M:TextDrawFont" syntax="TextDrawFont(textid, font)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The TextDraw to change
+			</param>
+			<param name="font">
+				<paraminfo>t_TEXT_DRAW_FONT </paraminfo>
+				There are four font styles, see  <a href="https://open.mp/docs/scripting/functions/TextDrawFont">https://open.mp/docs/scripting/functions/TextDrawFont</a>.  Font value <b><c>4</c></b> specifies that this is a txd sprite; <b><c>5</c></b> specifies that this  textdraw can display preview models.  A font value greater than 5 does not display, and anything  greater than 16 crashes the client
+			</param>
+			<library>omp_textdraw</library>  <summary>Changes the text font.</summary>      <remarks>If you want to change the font of a textdraw that is already shown, you don't have to recreate  it.  Simply use <a href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>/<a href="#TextDrawShowForAll">TextDrawShowForAll</a>  after modifying the textdraw and the change will be visible.</remarks> 
+		</member>
+		<member name="M:TextDrawLetterSize" syntax="TextDrawLetterSize(textid, width, height)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The TextDraw to change
+			</param>
+			<param name="width">
+				<paraminfo>Float </paraminfo>
+				Width of a char
+			</param>
+			<param name="height">
+				<paraminfo>Float </paraminfo>
+				Height of a char
+			</param>
+			<library>omp_textdraw</library>  <summary>Sets the width and height of the letters.</summary>        <remarks>When using this function purely for the benefit of affecting the TextDraw box, multiply  'y' by <b><c>0.135</c></b> to convert to <a href="#TextDrawTextSize">TextDrawTextSize</a>-like measurements.  <b>Hint</b>: it is easier and extremely precise to use <b><c>LD_SPAC:white</c></b> sprite for box-only  textdraws, <a href="#TextDrawTextSize">TextDrawTextSize</a> will have regular offsets.</remarks>  <remarks>If you want to change the letter size of a textdraw that is already shown, you don't have  to recreate it.  Simply use <a href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>/  <a href="#TextDrawShowForAll">TextDrawShowForAll</a>  after modifying the textdraw and the change will be visible. </remarks>  <remarks>Fonts appear to look the best with an x to y ratio of <b><c>1</c></b> to <b><c>4</c></b>  (e.g.  if x is <b><c>0.5</c></b> then y should be <b><c>2</c></b>). </remarks> 
+		</member>
+		<member name="M:TextDrawSetOutline" syntax="TextDrawSetOutline(textid, outlineSize)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The ID of the text draw to set the outline thickness of
+			</param>
+			<param name="outlineSize">
+				The thickness of the outline, as an integer. <b><c>0</c></b> for no outline
+			</param>
+			<library>omp_textdraw</library>  <summary>Sets the thickness of a textdraw's text's outline. <a href="#TextDrawBackgroundColor">TextDrawBackgroundColor</a>  can be used to change the colour.</summary>      <remarks>If you want to change the outline of a textdraw that is already shown, you don't have to  recreate it.  Simply use <a href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>/<a href="#TextDrawShowForAll">TextDrawShowForAll</a>  after modifying the textdraw and the change will be visible.</remarks> 
+		</member>
+		<member name="M:TextDrawTextSize" syntax="TextDrawTextSize(textid, width, height)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The TextDraw to set the size of
+			</param>
+			<param name="width">
+				<paraminfo>Float </paraminfo>
+				The size on the x axis (left/right) following the same 640x480 grid as  <a href="#TextDrawCreate">TextDrawCreate</a>
+			</param>
+			<param name="height">
+				<paraminfo>Float </paraminfo>
+				The size on the y axis (up/down) following the same 640x480 grid as  <a href="#TextDrawCreate">TextDrawCreate</a>
+			</param>
+			<library>omp_textdraw</library>  <summary>Change the size of a textdraw (box if <a href="#TextDrawUseBox">TextDrawUseBox</a> is enabled  and/or clickable area for use with <a href="#TextDrawSetSelectable">TextDrawSetSelectable</a>).</summary>        <remarks>  The x and y have different meanings with different TextDrawAlignment values:<br />  <ul>  <li><b><c>1</c></b> (left): they are the right-most corner of the box, absolute coordinates.</li>  <li><b><c>2</c></b> (center): they need to inverted (switch the two) and the x value is the overall  width of the box.</li>  <li><b><c>3</c></b> (right): the x and y are the coordinates of the left-most corner of the box  </li>  </ul>  </remarks>  <remarks>  Using font type <b><c>4</c></b> (sprite) and <b><c>5</c></b> (model preview) converts x and y of  this function from corner coordinates to WIDTH and HEIGHT (offsets).<br />  The TextDraw box starts <b><c>10.0</c></b> units up and <b><c>5.0</c></b> to the left as the origin  (<a href="#TextDrawCreate">TextDrawCreate</a> coordinate).<br />  This function defines the clickable area for use with <a href="#TextDrawSetSelectable">TextDrawSetSelectable</a>,  whether a box is shown or not.  </remarks>  <remarks>If you want to change the text size of a textdraw that is already shown, you don't have  to recreate it.  Simply use <a href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>/  <a href="#TextDrawShowForAll">TextDrawShowForAll</a>  after modifying the textdraw and the change will be visible.</remarks> 
+		</member>
+		<member name="M:TextDrawUseBox" syntax="TextDrawUseBox(textid, enableBox)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnGameModeInit_Races"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The ID of the text textdraw to toggle the box of
+			</param>
+			<param name="enableBox">
+				<paraminfo>bool </paraminfo>
+				<b><c>1</c></b> to show a box or <b><c>0</c></b> to not show a box
+			</param>
+			<library>omp_textdraw</library>  <summary>Toggle whether a textdraw uses a box or not.</summary>      <remarks>If the textdraw is already shown, it must be re-shown (<a href="#TextDrawShowForAll">TextDrawShowForAll</a>/<a  href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>) to show the changes of this function.</remarks>  <returns>  <b><c>1</c></b>: The function executed successfully.<br />  <b><c>0</c></b>: The function failed to execute.  This means the textdraw specified does not exist.  </returns> 
+		</member>
 		<member name="M:ToHexStr" syntax="ToHexStr(x)">
 			<stacksize value="15"/>
 			<referrer name="DisasmWriteCode"/>
@@ -29508,6 +29997,13 @@
 			<referrer name="@yC_cpo"/>
 			<referrer name="@yC_epo"/>
 			<referrer name="@yC_spoma"/>
+			<referrer name="@yC_join"/>
+			<referrer name="@yC_leave"/>
+			<referrer name="@yC_raceparticipants"/>
+			<referrer name="@yC_raceinfo"/>
+			<referrer name="@yC_racehelp"/>
+			<referrer name="@yC_aracehelp"/>
+			<referrer name="@yC_buildhelp"/>
 			<referrer name="@yC_fly"/>
 			<referrer name="@yC_setradio"/>
 			<referrer name="@yC_stopradio"/>
@@ -30560,6 +31056,7 @@
 			<referrer name="@yH_OnYSIInit@000"/>
 			<referrer name="@yH_OnScriptExit@000"/>
 			<referrer name="@yH_OnMasterSystemClose@000"/>
+			<referrer name="@yH_OnPlayerEnterRaceCheckpoint@000"/>
 			<referrer name="@yH_OnPlayerDisconnect@000"/>
 			<referrer name="@yH_OnPlayerDeath@000"/>
 			<referrer name="@yH_OnPlayerStateChange@000"/>
@@ -30871,6 +31368,18 @@
 			</param>
 			<param name="fRotZ">
 				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:_@yHOnPlayerEnterRaceCheckpoint@000" syntax="_@yHOnPlayerEnterRaceCheckpoint@000(playerid)">
+			<attribute name="public"/>
+			<stacksize value="7"/>
+			<referrer name="@yH_OnPlayerEnterRaceCheckpoint@000"/>
+			<dependency name="PlayerPlaySound"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="PlayerRaceData"/>
+			<dependency name="pCurrentCheckpoint"/>
+			<dependency name="pInRace"/>
+			<param name="playerid">
 			</param>
 		</member>
 		<member name="M:_@yHOnPlayerStateChange@000" syntax="_@yHOnPlayerStateChange@000(playerid, newstate, oldstate)">
@@ -31431,6 +31940,7 @@
 			<referrer name="OnRuntimeError"/>
 			<referrer name="Sys_InitSpawn"/>
 			<referrer name="Teleports_LoadAll"/>
+			<referrer name="OnGameModeInit_Races"/>
 			<referrer name="Indirection_OnGameModeInit"/>
 			<param name="string">
 				<paraminfo> [] </paraminfo>
@@ -31603,6 +32113,12 @@
 				<paraminfo> [] </paraminfo>
 			</param>
 			<library>y_utils - conversions</library>  <param name="string">String to try convert to a boolean.</param>  <returns>  bool: passed boolean.  </returns>  <remarks>  This can take a number of ways of representing booleans - 0, false and  nothing there.  Anything not one of those things (false is not case  sensitive) is assumed true.  </remarks> 
+		</member>
+		<member name="M:buildracehelp" syntax="buildracehelp(buildhelp)">
+			<tagname value="CMD_ALIAS"/>
+			<stacksize value="1"/>
+			<param name="buildhelp">
+			</param>
 		</member>
 		<member name="M:cache_get_field_count" syntax="cache_get_field_count(&amp;destination)">
 			<attribute name="native"/>
@@ -32889,6 +33405,18 @@
 			</param>
 			<library>console</library>  <summary>Outputs a formatted string on the console (the server window, not the in-game chat).</summary>      <seealso name="print"/>  <seealso name="format"/>  <remarks>The format string or its output should not exceed 1024 characters.  Anything beyond that  length can lead to a server to crash.</remarks>  <remarks>This function doesn't support <a href="#strpack">packed</a> strings.</remarks>  <remarks>  <b>Format Specifiers:</b><p/>  <ul>  <li><b><c>%i</c></b> - integer (whole number)</li>  <li><b><c>%d</c></b> - integer (whole number).</li>  <li><b><c>%s</c></b> - string</li>  <li><b><c>%f</c></b> - floating-point number (Float: tag)</li>  <li><b><c>%c</c></b> - ASCII character</li>  <li><b><c>%x</c></b> - hexadecimal number</li>  <li><b><c>%b</c></b> - binary number</li>  <li><b><c>%%</c></b> - literal <b><c>%</c></b></li>  <li><b><c>%q</c></b> - escape a text for SQLite. (Added in <b>0.3.7 R2</b>)</li>  </ul>  </remarks>  <remarks>The values for the placeholders follow in the exact same order as parameters in the call.  For example, <b><c>"I am %i years old"</c></b> - the <b><c>%i</c></b> will be replaced with an Integer  variable, which is the person's age.</remarks>  <remarks>You may optionally put a number between the <b><c>%</c></b> and the letter of the placeholder  code.  This number indicates the field width; if the size of the parameter to print at the position  of the placeholder is smaller than the field width, the field is expanded with spaces.  To cut the  number of decimal places beeing shown of a float, you can add <b><c>.&lt;max number&gt;</c></b> between  the <b><c>%</c></b> and the <b><c>f</c></b>. (example: <b><c>%.2f</c></b>)</remarks>  <return>This function always returns 0.</return> 
 		</member>
+		<member name="M:raceadminhelp" syntax="raceadminhelp(aracehelp)">
+			<tagname value="CMD_ALIAS"/>
+			<stacksize value="1"/>
+			<param name="aracehelp">
+			</param>
+		</member>
+		<member name="M:racers" syntax="racers(raceparticipants)">
+			<tagname value="CMD_ALIAS"/>
+			<stacksize value="1"/>
+			<param name="raceparticipants">
+			</param>
+		</member>
 		<member name="M:random" syntax="random(max)">
 			<attribute name="native"/>
 			<referrer name="Utils_ChaosMod"/>
@@ -32967,6 +33495,24 @@
 				<paraminfo> &amp; </paraminfo>
 			</param>
 			<param name="...">
+			</param>
+		</member>
+		<member name="M:ri" syntax="ri(raceinfo)">
+			<tagname value="CMD_ALIAS"/>
+			<stacksize value="1"/>
+			<param name="raceinfo">
+			</param>
+		</member>
+		<member name="M:rp" syntax="rp(raceparticipants)">
+			<tagname value="CMD_ALIAS"/>
+			<stacksize value="1"/>
+			<param name="raceparticipants">
+			</param>
+		</member>
+		<member name="M:rps" syntax="rps(raceparticipants)">
+			<tagname value="CMD_ALIAS"/>
+			<stacksize value="1"/>
+			<param name="raceparticipants">
 			</param>
 		</member>
 		<member name="M:setarg" syntax="setarg(arg, index, value)">

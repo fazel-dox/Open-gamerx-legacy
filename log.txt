@@ -1219,3 +1219,4 @@ Loaded 21 component(s) from C:\Users\ROG\Documents\GitHub\Open-gamerx-legacy\com
 [2025-09-02T07:55:20+0330] [Warning] This won't affect the server's behaviour.
 [2025-09-02T07:55:38+0330] [Info] [connection] incoming connection: 127.0.0.1:63422 id: 0
 [2025-09-02T07:55:38+0330] [Info] [join] Panizjons[X] has joined the server (0:127.0.0.1)
+[2025-09-02T08:17:13+0330] [Info] plugin.mysql: Unloading plugin...
