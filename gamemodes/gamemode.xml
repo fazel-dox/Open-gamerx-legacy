@@ -477,6 +477,18 @@
 			<referrer name="Hooks_GetPreloadLibraries"/>
 			<referrer name="CGen_OnCodeInit"/>
 		</member>
+		<member name="T:E_CHECKPOINT_DATA" value="3">
+			<tagname value="E_CHECKPOINT_DATA"/>
+			<member name="C:cpX" value="0">
+				<tagname value="Float"/>
+			</member>
+			<member name="C:cpY" value="1">
+				<tagname value="Float"/>
+			</member>
+			<member name="C:cpZ" value="2">
+				<tagname value="Float"/>
+			</member>
+		</member>
 		<member name="T:E_CLASS_INFO" value="73">
 			<tagname value="E_CLASS_INFO"/>
 			<member name="C:cName" value="0">
@@ -2294,6 +2306,7 @@
 		<member name="C:EOS" value="0">
 			<referrer name="strcopy"/>
 			<referrer name="ApplyPlayerObjectMaterial"/>
+			<referrer name="@_yCsaverace"/>
 			<referrer name="Iter_OnPlayerConnect"/>
 		</member>
 		<member name="C:E_INDIRECTION_CLAIM__" value="8">
@@ -2865,6 +2878,9 @@
 			<referrer name="@_yCcpo"/>
 			<referrer name="@_yCepo"/>
 			<referrer name="@_yCspoma"/>
+			<referrer name="@_yCsaverace"/>
+			<referrer name="@_yCloadrace"/>
+			<referrer name="OnRaceLoad"/>
 			<referrer name="@_yCsetradio"/>
 		</member>
 		<member name="C:__local0_offset" value="-4">
@@ -3610,6 +3626,7 @@
 			<referrer name="@_yCspoma"/>
 			<referrer name="PObjects_OnDisconnect"/>
 			<referrer name="@_yCleave"/>
+			<referrer name="OnRaceLoad"/>
 			<referrer name="StopFlying"/>
 			<referrer name="_@yHOnPlayerDisconnect@000"/>
 			<referrer name="_@yHOnPlayerDeath@000"/>
@@ -3796,6 +3813,8 @@
 			<referrer name="@yC_racehelp"/>
 			<referrer name="@yC_aracehelp"/>
 			<referrer name="@yC_buildhelp"/>
+			<referrer name="@yC_saverace"/>
+			<referrer name="@yC_loadrace"/>
 			<referrer name="@yC_fly"/>
 			<referrer name="@yC_setradio"/>
 			<referrer name="@yC_stopradio"/>
@@ -4420,6 +4439,7 @@
 			<referrer name="@_yCspoma"/>
 			<referrer name="PObjects_OnDisconnect"/>
 			<referrer name="ApplyPlayerObjectMaterial"/>
+			<referrer name="@_yCsaverace"/>
 			<referrer name="_@yHOnPlayerEditObject@000"/>
 		</member>
 		<member name="F:PlayerRaceData">
@@ -5340,6 +5360,17 @@
 		<member name="F:__file">
 		</member>
 		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+			<referrer name="@_yCsaverace"/>
+			<referrer name="@_yCloadrace"/>
+			<referrer name="OnRaceLoad"/>
+		</member>
+		<member name="F:__file">
 			<referrer name="@_yCcpo"/>
 			<referrer name="@_yCepo"/>
 			<referrer name="@_yCspoma"/>
@@ -6109,13 +6140,27 @@
 		</member>
 		<member name="F:g_JoinRaceTD">
 			<tagname value="Text"/>
+			<referrer name="OnRaceLoad"/>
 			<referrer name="OnGameModeInit_Races"/>
 			<referrer name="OnGameModeExit_Races"/>
+		</member>
+		<member name="F:g_LoadedRaceCheckpointCount">
+			<referrer name="OnRaceLoad"/>
+		</member>
+		<member name="F:g_LoadedRaceCheckpoints">
+			<referrer name="OnRaceLoad"/>
+		</member>
+		<member name="F:g_LoadedRaceName">
+			<referrer name="OnRaceLoad"/>
+		</member>
+		<member name="F:g_LoadedRaceVehicleID">
+			<referrer name="OnRaceLoad"/>
 		</member>
 		<member name="F:g_RaceState">
 			<referrer name="@_yCjoin"/>
 			<referrer name="@_yCraceparticipants"/>
 			<referrer name="@_yCraceinfo"/>
+			<referrer name="OnRaceLoad"/>
 		</member>
 		<member name="F:g_TeleportKeyCount">
 			<referrer name="Teleports_LoadAll"/>
@@ -6157,6 +6202,8 @@
 			<referrer name="OnPasswordHash"/>
 			<referrer name="LogAdminAction"/>
 			<referrer name="Ban_PerformBan"/>
+			<referrer name="@_yCsaverace"/>
+			<referrer name="@_yCloadrace"/>
 			<referrer name="Indirection_OnGameModeInit"/>
 		</member>
 		<member name="F:g_nargs">
@@ -8861,6 +8908,26 @@
 			<param name="help">
 			</param>
 		</member>
+		<member name="M:@_yCloadrace" syntax="@_yCloadrace(playerid, params[], help)">
+			<attribute name="public"/>
+			<stacksize value="71"/>
+			<referrer name="@yC_loadrace"/>
+			<dependency name="SSCANF__"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="SendClientMessagef"/>
+			<dependency name="__file"/>
+			<dependency name="__line"/>
+			<dependency name="g_dbConnection"/>
+			<dependency name="mysql_format"/>
+			<dependency name="mysql_tquery"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
+			</param>
+		</member>
 		<member name="M:@_yCmegadrunk" syntax="@_yCmegadrunk(playerid, params[])">
 			<attribute name="public"/>
 			<stacksize value="5"/>
@@ -8926,6 +8993,35 @@
 			</param>
 			<param name="params">
 				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:@_yCsaverace" syntax="@_yCsaverace(playerid, params[], help)">
+			<attribute name="public"/>
+			<stacksize value="142"/>
+			<referrer name="@yC_saverace"/>
+			<dependency name="EOS"/>
+			<dependency name="GetPlayerName"/>
+			<dependency name="GetPlayerObjectPos"/>
+			<dependency name="PlayerObjects"/>
+			<dependency name="PlayerObjects"/>
+			<dependency name="SSCANF__"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="SendClientMessagef"/>
+			<dependency name="__file"/>
+			<dependency name="__line"/>
+			<dependency name="format"/>
+			<dependency name="g_dbConnection"/>
+			<dependency name="mysql_format"/>
+			<dependency name="mysql_tquery"/>
+			<dependency name="pobExists"/>
+			<dependency name="pobID"/>
+			<dependency name="strcat"/>
+			<param name="playerid">
+			</param>
+			<param name="params">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="help">
 			</param>
 		</member>
 		<member name="M:@_yCsetradio" syntax="@_yCsetradio(playerid, params[], help)">
@@ -9289,6 +9385,23 @@
 			<param name="i">
 			</param>
 		</member>
+		<member name="M:@yC_loadrace" syntax="@yC_loadrace(a, b[], c, i)">
+			<tagname value="_YCMD_4"/>
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="@_"/>
+			<dependency name="@_yCloadrace"/>
+			<dependency name="U@"/>
+			<param name="a">
+			</param>
+			<param name="b">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="c">
+			</param>
+			<param name="i">
+			</param>
+		</member>
 		<member name="M:@yC_megadrunk" syntax="@yC_megadrunk(a, b[], c, i)">
 			<tagname value="_YCMD_4"/>
 			<attribute name="public"/>
@@ -9363,6 +9476,23 @@
 			<stacksize value="8"/>
 			<dependency name="@_"/>
 			<dependency name="@_yCrules"/>
+			<dependency name="U@"/>
+			<param name="a">
+			</param>
+			<param name="b">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="c">
+			</param>
+			<param name="i">
+			</param>
+		</member>
+		<member name="M:@yC_saverace" syntax="@yC_saverace(a, b[], c, i)">
+			<tagname value="_YCMD_4"/>
+			<attribute name="public"/>
+			<stacksize value="8"/>
+			<dependency name="@_"/>
+			<dependency name="@_yCsaverace"/>
 			<dependency name="U@"/>
 			<param name="a">
 			</param>
@@ -19462,6 +19592,7 @@
 			<referrer name="LogAdminAction"/>
 			<referrer name="@_yCkick"/>
 			<referrer name="Ban_PerformBan"/>
+			<referrer name="@_yCsaverace"/>
 			<param name="playerid">
 				The ID of the player to get the name of
 			</param>
@@ -19473,6 +19604,30 @@
 				The length of the string that should be stored.  Recommended to be <b><c>MAX_PLAYER_NAME</c></b>
 			</param>
 			<library>omp_player</library>  <summary>Get a player's name.</summary>        <seealso name="SetPlayerName" />  <seealso name="GetPlayerIp" />  <seealso name="GetPlayerPing" />  <seealso name="GetPlayerScore" />  <seealso name="GetPlayerVersion" />  <remarks>A player's name can be up to 24 characters long (as of <b>0.3d R2</b>) by using <a href="#SetPlayerName">SetPlayerName</a>.  This is defined as <b><c>24</c></b> by default.  However, the client can  only join with a nickname between 3 and 20 characters, otherwise the connection will be rejected  and the player has to quit to choose a valid name.</remarks>  <returns>The length of the player's name. <b><c>0</c></b> if player specified doesn't exist.</returns> 
+		</member>
+		<member name="M:GetPlayerObjectPos" syntax="GetPlayerObjectPos(playerid, objectid, &amp;x, &amp;y, &amp;z)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="@_yCsaverace"/>
+			<param name="playerid">
+				The ID of the player whose player object to get the position of
+			</param>
+			<param name="objectid">
+				The object's ID of which you want the current location
+			</param>
+			<param name="x">
+				<paraminfo>Float &amp; </paraminfo>
+				A float variable in which to store the x coordinate, passed by reference
+			</param>
+			<param name="y">
+				<paraminfo>Float &amp; </paraminfo>
+				A float variable in which to store the y coordinate, passed by reference
+			</param>
+			<param name="z">
+				<paraminfo>Float &amp; </paraminfo>
+				A float variable in which to store the z coordinate, passed by reference
+			</param>
+			<library>omp_object</library>  <summary>Get the position of a player object (<a href="#CreatePlayerObject">CreatePlayerObject</a>).</summary>            <seealso name="" />  <seealso name="SetPlayerObjectPos" />  <seealso name="GetPlayerObjectRot" />  <seealso name="GetObjectPos" />  <seealso name="CreatePlayerObject" />  <returns>  <b><c>1</c></b>: The function executed successfully.<br />  <b><c>0</c></b>: The function failed to execute.  The player and/or the object don't exist.<br  />  The object's position is stored in the specified variables.  </returns> 
 		</member>
 		<member name="M:GetPlayerPoolSize" syntax="GetPlayerPoolSize()">
 			<stacksize value="1"/>
@@ -25558,6 +25713,40 @@
 				<paraminfo>MySQL </paraminfo>
 			</param>
 		</member>
+		<member name="M:OnRaceLoad" syntax="OnRaceLoad(playerid, cache_id)">
+			<attribute name="public"/>
+			<stacksize value="264"/>
+			<dependency name="RACE_STATE_WAITING"/>
+			<dependency name="SSCANF__"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="SendClientMessageToAll"/>
+			<dependency name="SendClientMessagef"/>
+			<dependency name="TextDrawShowForAll"/>
+			<dependency name="__file"/>
+			<dependency name="__line"/>
+			<dependency name="cache_get_row_count"/>
+			<dependency name="cache_get_value_name"/>
+			<dependency name="cache_get_value_name_int"/>
+			<dependency name="cpX"/>
+			<dependency name="cpY"/>
+			<dependency name="cpZ"/>
+			<dependency name="false"/>
+			<dependency name="format"/>
+			<dependency name="g_JoinRaceTD"/>
+			<dependency name="g_LoadedRaceCheckpointCount"/>
+			<dependency name="g_LoadedRaceCheckpoints"/>
+			<dependency name="g_LoadedRaceCheckpoints"/>
+			<dependency name="g_LoadedRaceName"/>
+			<dependency name="g_LoadedRaceVehicleID"/>
+			<dependency name="g_RaceState"/>
+			<dependency name="strfind"/>
+			<dependency name="strmid"/>
+			<param name="playerid">
+			</param>
+			<param name="cache_id">
+				<paraminfo>Cache </paraminfo>
+			</param>
+		</member>
 		<member name="M:OnRconCommand" syntax="OnRconCommand(cmd[])">
 			<attribute name="public"/>
 			<stacksize value="6"/>
@@ -27712,6 +27901,9 @@
 			<referrer name="@_yCcpo"/>
 			<referrer name="@_yCepo"/>
 			<referrer name="@_yCspoma"/>
+			<referrer name="@_yCsaverace"/>
+			<referrer name="@_yCloadrace"/>
+			<referrer name="OnRaceLoad"/>
 			<referrer name="@_yCsetradio"/>
 			<param name="file">
 				<paraminfo> [] </paraminfo>
@@ -28207,6 +28399,9 @@
 			<referrer name="@_yCraceinfo"/>
 			<referrer name="@_yCaracehelp"/>
 			<referrer name="@_yCbuildhelp"/>
+			<referrer name="@_yCsaverace"/>
+			<referrer name="@_yCloadrace"/>
+			<referrer name="OnRaceLoad"/>
 			<referrer name="StartFlying"/>
 			<referrer name="StopFlying"/>
 			<referrer name="_@yHOnPlayerConnect@000"/>
@@ -28234,6 +28429,7 @@
 			<attribute name="native"/>
 			<referrer name="@_yCkick"/>
 			<referrer name="Ban_PerformBan"/>
+			<referrer name="OnRaceLoad"/>
 			<referrer name="@_yCsetradio"/>
 			<param name="colour">
 				The colour of the message (<b>RGBA</b>)
@@ -28252,6 +28448,9 @@
 			<attribute name="native"/>
 			<referrer name="Teleport_ToRandom"/>
 			<referrer name="@_yCcpo"/>
+			<referrer name="@_yCsaverace"/>
+			<referrer name="@_yCloadrace"/>
+			<referrer name="OnRaceLoad"/>
 			<referrer name="_@yHOnPlayerEditObject@000"/>
 			<param name="playerid">
 				The ID of the player to display the message to
@@ -29876,6 +30075,16 @@
 			</param>
 			<library>omp_textdraw</library>  <summary>Sets the thickness of a textdraw's text's outline. <a href="#TextDrawBackgroundColor">TextDrawBackgroundColor</a>  can be used to change the colour.</summary>      <remarks>If you want to change the outline of a textdraw that is already shown, you don't have to  recreate it.  Simply use <a href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>/<a href="#TextDrawShowForAll">TextDrawShowForAll</a>  after modifying the textdraw and the change will be visible.</remarks> 
 		</member>
+		<member name="M:TextDrawShowForAll" syntax="TextDrawShowForAll(textid)">
+			<tagname value="bool"/>
+			<attribute name="native"/>
+			<referrer name="OnRaceLoad"/>
+			<param name="textid">
+				<paraminfo>Text </paraminfo>
+				The ID of the textdraw to show.  Returned by <a href="#TextDrawCreate">TextDrawCreate</a>
+			</param>
+			<library>omp_textdraw</library>  <summary>Shows a textdraw for all players.</summary>    <seealso name="TextDrawShowForPlayer" />  <seealso name="TextDrawHideForPlayer" />  <seealso name="TextDrawHideForAll" />  <returns>  <b><c>1</c></b>: The function executed successfully.<br />  <b><c>0</c></b>: The function failed to execute.  This means the textdraw specified does not exist.  </returns> 
+		</member>
 		<member name="M:TextDrawTextSize" syntax="TextDrawTextSize(textid, width, height)">
 			<tagname value="bool"/>
 			<attribute name="native"/>
@@ -30004,6 +30213,8 @@
 			<referrer name="@yC_racehelp"/>
 			<referrer name="@yC_aracehelp"/>
 			<referrer name="@yC_buildhelp"/>
+			<referrer name="@yC_saverace"/>
+			<referrer name="@yC_loadrace"/>
 			<referrer name="@yC_fly"/>
 			<referrer name="@yC_setradio"/>
 			<referrer name="@yC_stopradio"/>
@@ -32138,6 +32349,7 @@
 			<attribute name="native"/>
 			<referrer name="cache_num_rows"/>
 			<referrer name="OnAccountLoad"/>
+			<referrer name="OnRaceLoad"/>
 			<param name="destination">
 				<paraminfo> &amp; </paraminfo>
 			</param>
@@ -32167,6 +32379,7 @@
 		<member name="M:cache_get_value_name" syntax="cache_get_value_name(row_idx, column_name[], destination[], max_len)">
 			<attribute name="native"/>
 			<referrer name="OnAccountLoad"/>
+			<referrer name="OnRaceLoad"/>
 			<param name="row_idx">
 			</param>
 			<param name="column_name">
@@ -32194,6 +32407,7 @@
 			<attribute name="native"/>
 			<referrer name="cache_get_value_name_bool"/>
 			<referrer name="OnAccountLoad"/>
+			<referrer name="OnRaceLoad"/>
 			<param name="row_idx">
 			</param>
 			<param name="column_name">
@@ -32811,6 +33025,8 @@
 			<referrer name="@_yCcpo"/>
 			<referrer name="@_yCepo"/>
 			<referrer name="ApplyPlayerObjectMaterial"/>
+			<referrer name="@_yCsaverace"/>
+			<referrer name="OnRaceLoad"/>
 			<referrer name="_@yHOnPlayerConnect@000"/>
 			<referrer name="@_yCsetradio"/>
 			<referrer name="OnPlayerCommandReceived"/>
@@ -33322,6 +33538,25 @@
 				<paraminfo>MySQL </paraminfo>
 			</param>
 		</member>
+		<member name="M:mysql_format" syntax="mysql_format(handle, output[], max_len, format[], ...)">
+			<attribute name="native"/>
+			<referrer name="@_yCsaverace"/>
+			<referrer name="@_yCloadrace"/>
+			<param name="handle">
+				<paraminfo>MySQL </paraminfo>
+			</param>
+			<param name="output">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="max_len">
+			</param>
+			<param name="format">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="...">
+				<paraminfo> {Float,_} </paraminfo>
+			</param>
+		</member>
 		<member name="M:mysql_tquery" syntax="mysql_tquery(handle, query[], callback[], format[], ...)">
 			<attribute name="native"/>
 			<referrer name="LoadAccount"/>
@@ -33329,6 +33564,8 @@
 			<referrer name="OnPasswordHash"/>
 			<referrer name="LogAdminAction"/>
 			<referrer name="Ban_PerformBan"/>
+			<referrer name="@_yCsaverace"/>
+			<referrer name="@_yCloadrace"/>
 			<param name="handle">
 				<paraminfo>MySQL </paraminfo>
 			</param>
@@ -33703,6 +33940,7 @@
 			<referrer name="Hooks_GetDefaultReturn"/>
 			<referrer name="Command_ReProcess__"/>
 			<referrer name="Command_Remove"/>
+			<referrer name="@_yCsaverace"/>
 			<param name="dest">
 				<paraminfo> [] </paraminfo>
 				The string to store the two concatenated strings in
@@ -33819,6 +34057,7 @@
 			<referrer name="Command_RunScript"/>
 			<referrer name="Command_Add__"/>
 			<referrer name="Teleports_LoadAll"/>
+			<referrer name="OnRaceLoad"/>
 			<param name="string">
 				<paraminfo> [] </paraminfo>
 				The string you want to search in (haystack)
@@ -33894,6 +34133,7 @@
 			<attribute name="native"/>
 			<referrer name="GetPlayerRPComponents"/>
 			<referrer name="Teleports_LoadAll"/>
+			<referrer name="OnRaceLoad"/>
 			<param name="dest">
 				<paraminfo> [] </paraminfo>
 				The string to store the extracted characters in
