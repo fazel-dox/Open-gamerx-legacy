@@ -17,7 +17,13 @@
 // These are needed by nearly every file in the project.
 #include <open.mp>
 #include <sscanf2>
-#include <YSI_Visual/y_commands>
+
+// CORRECT YSI INITIALIZATION:
+// This single include handles the entire YSI library suite, including
+// y_commands, y_hooks, and all the core utilities that were causing errors.
+// It must be placed AFTER sscanf2.
+#include <YSI_Coding\y_hooks>
+
 #include <samp_bcrypt>
 // a_mysql is included via mysql.inc below
 
