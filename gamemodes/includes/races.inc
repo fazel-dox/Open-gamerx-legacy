@@ -12,10 +12,7 @@
 #endif
 #define _races_included
 
-// We need these for the YSI commands and other functions
-#include <open.mp>
-#include <YSI_Visual/y_commands>
-
+#include "core.inc" // Include the new foundation
 
 // ---===[ 1. DEFINITIONS & ENUMS ]===---
 
@@ -26,6 +23,7 @@
 #define COLOR_RACE_WARNING   0xFF0033AA
 #define COLOR_RACE_FINISH    0x7FAAFF
 #define COLOR_ADMIN_ACTION   0xC2A2DAFF
+#define COLOR_SERVER_ALERT   0xFF0000FF
 
 // for stuff we haven't confirmed from the original GX yet
 #define COLOR_PLACEHOLDER    0x9E9E9EAA

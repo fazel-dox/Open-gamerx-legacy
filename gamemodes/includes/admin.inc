@@ -7,23 +7,15 @@
     ================================================================================
 */
 
-#include <open.mp>
-#include <a_mysql>
-
 #if defined _admin_included
     #endinput
 #endif
 #define _admin_included
 
-// ---===[ 1. DEFINITIONS & ENUMS ]===---
+#include "core.inc" // Include the new foundation
 
-#define ADMIN_NONE          0
-#define ADMIN_PLAYER        1
-#define ADMIN_TRUSTED_PLAYER 2
-#define ADMIN_TRIAL         3
-#define ADMIN_STANDARD      4
-#define ADMIN_MANAGEMENT    9
-#define ADMIN_OWNER         10
+// ---===[ 1. DEFINITIONS & ENUMS ]===---
+// All ADMIN_ level definitions have been moved to core.inc
 
 #define DIALOG_BAN_MESSAGE      102
 
