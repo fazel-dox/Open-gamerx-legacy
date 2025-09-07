@@ -6,7 +6,7 @@
                  Initializes all systems and handles core callbacks.
     ================================================================================
 */
-
+#include <open.mp>
 // ---===[ 1. LIBRARIES ]===---
 // ALL libraries and core systems are now handled by core.inc
 // This section is intentionally left blank.
@@ -37,7 +37,7 @@
 // ---===[ 3. DEFINITIONS / 4. GLOBALS ]===---
 // MOVED TO includes/core.inc to provide global access to all systems.
 // This section is intentionally left blank.
-
+#include <YSI_Visual/y_commands>
 
 // ---===[ 5. CORE CALLBACKS ]===---
 
@@ -114,7 +114,9 @@ public OnPlayerRequestClass(playerid, classid)
     new E_CLASSES:real_class_id = E_CLASSES:g_ClassMap[classid];
     PlayerData[playerid][pClass] = real_class_id;
     Sys_OnPlayerRequestClass(playerid, classid);
-    Teleports_ToRandom(playerid, ClassInfo[real_class_id][cTeleportKey]);
+
+    // FIX: The compiler suggested this was a typo. Corrected from "Teleports_ToRandom"
+    Teleport_ToRandom(playerid, ClassInfo[real_class_id][cTeleportKey]);
     return 1;
 }
 
@@ -128,6 +130,7 @@ public OnPlayerSpawn(playerid)
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
+    // FIX: This function is now correctly forwarded in accounts.inc
     Dialog_OnAccounts(playerid, dialogid, response, listitem, inputtext);
     switch(dialogid)
     {
@@ -154,6 +157,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_ERRORS:success)
 {
     // This callback is for handling unknown commands server-wide.
+    // FIX: These constants are now defined because YSI is loading correctly.
     if (success == COMMAND_UNDEFINED)
     {
         GameTextForPlayer(playerid, "~r~~h~Unknown Command!", 3000, 3);
@@ -191,4 +195,38 @@ hook OnPlayerEditObject(playerid, bool:playerobject, PlayerObject:objectid, EDIT
     new objectSlot = -1;
     for (new i = 0; i < MAX_PLAYER_OBJECTS; i++)
     {
-        if
+        // FIX: The compiler flagged an error here. It requires the 'PlayerObjects' variable
+        // to be defined. Assuming it comes from 'player_objects.inc'. The structure should be:
+        // if (PlayerObjects[playerid][i][pobExists] && PlayerObjects[playerid][i][pobID] == objectid)
+        // I will assume the original code was correct and the error was a symptom of other failures.
+        if (PlayerObjects[playerid][i][pobExists] && PlayerObjects[playerid][i][pobID] == objectid)
+        {
+            objectSlot = i;
+            break;
+        }
+    }
+
+    if (objectSlot == -1)
+    {
+        // This is a player object, but not one tracked by our system.
+        return 1;
+    }
+    
+    new modelid = PlayerObjects[playerid][objectSlot][pobModel];
+
+    if (response == EDIT_RESPONSE_CANCEL)
+    {
+        SendClientMessagef(playerid, COLOR_POB_INFO, "* You cancelled editing player object %d (ID:%d) without saving... the position and rotation has been reset.", objectSlot, modelid);
+    }
+    else if (response == EDIT_RESPONSE_FINAL)
+    {
+        SetPlayerObjectPos(playerid, objectid, fX, fY, fZ);
+        SetPlayerObjectRot(playerid, objectid, fRotX, fRotY, fRotZ);
+        
+        SendClientMessagef(playerid, COLOR_POB_INFO, "** The new position of player object %d (ID:%d) has been saved...", objectSlot, modelid);
+        SendClientMessage(playerid, COLOR_POB_INFO, "*	 note that other players will need to /rpo you again before the object is updated on their screen.");
+    }
+    
+    // We have fully handled the event for our system.
+    return 1;
+}

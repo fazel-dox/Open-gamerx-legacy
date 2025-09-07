@@ -12,7 +12,6 @@
 #define _class_system_included
 
 #include <open.mp>
-#include <sscanf2>
 
 // ---===[ 0. DEFINITIONS ]===---
 #define MAX_CLASSES 300

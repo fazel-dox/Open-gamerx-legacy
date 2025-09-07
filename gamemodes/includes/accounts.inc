@@ -18,7 +18,7 @@ forward OnAccountLoad(playerid, Cache:cache_id);
 forward OnAccountRegister(playerid, Cache:cache_id);
 forward OnPasswordHash(playerid, const pass_hash[]);
 forward OnPasswordVerify(playerid, bool:success);
-
+forward Dialog_OnAccounts(playerid, dialogid, response, listitem, inputtext[]);
 // ---===[ NEW: On-Demand Commands ]===---
 
 // Player types /register to start the registration process
@@ -118,6 +118,29 @@ public OnPasswordHash(playerid, const pass_hash[])
     mysql_format(g_dbConnection, query, sizeof(query), "INSERT INTO `players` (`Name`, `Password`, `Level`, `Money`, `Kills`, `Deaths`, `AdminLevel`) VALUES ('%e', '%s', 1, 5000, 0, 0, %d)", GetPlayerName(playerid), pass_hash, ADMIN_PLAYER);
     mysql_tquery(g_dbConnection, query, "OnAccountRegister", "i", playerid);
     return 1;
+}
+public Dialog_OnAccounts(playerid, dialogid, response, listitem, inputtext[])
+{
+    switch(dialogid)
+    {
+        case DIALOG_LOGIN:
+        {
+            if (!response) return 1; // Player clicked "Cancel"
+            if (!strlen(inputtext)) return ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Account Login", "{FF0000}Password cannot be empty.\n{FFFFFF}Please enter your password:", "Login", "Cancel");
+
+            bcrypt_verify(playerid, inputtext, PlayerData[playerid][pPassword], "OnPasswordVerify");
+            return 1;
+        }
+        case DIALOG_REGISTER:
+        {
+            if (!response) return 1; // Player clicked "Cancel"
+            if (strlen(inputtext) < 4) return ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD, "Account Registration", "{FF0000}Password must be at least 4 characters.\n{FFFFFF}Please choose a new password:", "Register", "Cancel");
+
+            bcrypt_hash(playerid, inputtext, "OnPasswordHash");
+            return 1;
+        }
+    }
+    return 0;
 }
 
 // ... (OnPasswordVerify is fine) ...

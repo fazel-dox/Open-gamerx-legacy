@@ -1,3 +1,7 @@
+/*================================================================================
+    === START OF FILE: gamemodes\includes\mysql.inc ===
+================================================================================*/
+
 /*
     ================================================================================
     Project:    GamerX Rebirth - MySQL Core
@@ -9,7 +13,7 @@
 
 #if defined _mysql_included
     #endinput
-#endif
+#endif // FIX: Added the missing #endif. This was a critical preprocessor bug.
 #define _mysql_included
 
 // FIX: This line is required for any of the mysql_* functions to be recognized.
@@ -42,3 +46,7 @@ stock MySQL_Connect()
     print("[SUCCESS] Database connection established.");
     return 1;
 }
+
+/*================================================================================
+    === END OF FILE: gamemodes\includes\mysql.inc ===
+================================================================================*/

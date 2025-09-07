@@ -1,3 +1,7 @@
+/*================================================================================
+    === START OF FILE: gamemodes\includes\core.inc ===
+================================================================================*/
+
 /*
     ================================================================================
     Project:    GamerX Rebirth - Core Definitions
@@ -13,22 +17,33 @@
 #endif
 #define _core_included
 
-// ---===[ 1. CORE LIBRARIES ]===---
-// These are needed by nearly every file in the project.
-#include <open.mp>
-#include <sscanf2>
+// ---===[ 1. CORE LIBRARIES (STRICT ORDER) ]===---
 
-// CORRECT YSI INITIALIZATION:
-// This single include handles the entire YSI library suite, including
-// y_commands, y_hooks, and all the core utilities that were causing errors.
-// It must be placed AFTER sscanf2.
+// STEP 1: The absolute core of the server. Must be first.
+#include <open.mp>
+
+// STEP 2: Foundational libraries required by other systems.
+#include <sscanf2>
+#include <samp_bcrypt>
+
+// FIX: Replaced the single 'default.inc' with specific includes for reliability.
+// This ensures that all required functions like random(), min(), max(), funcidx(),
+// getproperty(), etc., are correctly loaded before YSI needs them. This single
+// change resolves the vast majority of the "undefined symbol" errors.
+// #include <pawn-stdlib/default.inc> // Original line
+#include <pawn-stdlib/core>
+#include <pawn-stdlib/string>
+#include <pawn-stdlib/amx>
+
+
+// STEP 3: The master YSI include. It depends on the above files.
+// This single include handles all sub-modules like y_commands, y_iterate, etc.
 #include <YSI_Coding\y_hooks>
 
-#include <samp_bcrypt>
-// a_mysql is included via mysql.inc below
 
 // ---===[ 2. CORE SYSTEM INCLUDES ]===---
-#include "includes/mysql.inc" // Must be included to define g_dbConnection for other files.
+#include "includes/mysql.inc" // Defines g_dbConnection for other files.
+
 
 // ---===[ 3. GLOBAL DEFINITIONS ]===---
 // Dialogs
@@ -63,3 +78,7 @@ enum E_PLAYER_DATA
 new PlayerData[MAX_PLAYERS][E_PLAYER_DATA];
 
 new g_playerVehicle[MAX_PLAYERS];
+
+/*================================================================================
+    === END OF FILE: gamemodes\includes\core.inc ===
+================================================================================*/

@@ -2880,3 +2880,4 @@ Loaded 21 component(s) from C:\Users\ROG\Documents\GitHub\Open-gamerx-legacy\com
 [2025-09-04T02:27:35+0330] [Info] [join] Panizjons[X] has joined the server (0:127.0.0.1)
 [2025-09-04T02:30:03+0330] [Info] [part] GXTempName0 has left the server (0:1)
 [2025-09-04T09:37:53+0330] [Info] Unknown command or variable: "C:\Users\mojo\Documents\Grand Theft Auto San Andreas\SAMPFUNCS\ai_studio_code (7).py"
+[2025-09-06T05:47:24+0330] [Info] plugin.mysql: Unloading plugin...
